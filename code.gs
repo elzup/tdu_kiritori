@@ -1,5 +1,22 @@
 var CONSUMER_KEY, CONSUMER_SECRET;
 
+var runTimeList = {
+    "9:0"  : "1限目開始",
+    "10:30": "1限目終了",
+    "10:40": "2限目開始",
+    "12:10": "2限目終了",
+    "13:10": "3限目開始",
+    "14:40": "3限目終了",
+    "14:50": "4限目開始",
+    "16:20": "4限目終了",
+    "16:30": "5限目開始",
+    "18:0" : "5限目終了",
+    "18:10": "6限目開始",
+    "19:40": "6限目終了",
+    "19:50": "7限目開始",
+    "21:20": "7限目終了"
+};
+
 /**
  * Authorizes and makes a request to the Twitter API.
  */
@@ -81,13 +98,29 @@ function authCallback(request) {
 
 
 function post() {
+    if (!isRunTime()) {
+        return;
+    }
     setKeys();
     run(makeText());
 }
 
+function isRunTime() {
+    var date = new Date();
+    // 土日は省く
+    if (date.getDay() % 6 == 0) {
+        return false;
+    }
+    var timeCode = date.getHours() + ":" + date.getMinutes();
+    return (timeCode in runTimeList);
+}
+
 
 function makeText() {
-    return "✄------------ AM 8:00 ------------✄";
+    var date = new Date();
+    var timeCode = date.getHours() + ":" + date.getMinutes();
+    var middleText = runTimeList[timeCode];
+    return "✄------------ " + middleText + " ------------✄";
 }
 
 function setKeys() {
