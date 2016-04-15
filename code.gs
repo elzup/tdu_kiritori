@@ -1,5 +1,4 @@
-var CONSUMER_KEY = '***';
-var CONSUMER_SECRET = '***';
+var CONSUMER_KEY, CONSUMER_SECRET;
 
 /**
  * Authorizes and makes a request to the Twitter API.
@@ -82,6 +81,23 @@ function authCallback(request) {
 
 
 function post() {
-  run('✄------------ AM 8:00 ------------✄');
+    setKeys();
+    run(makeText());
 }
 
+
+function makeText() {
+    return "✄------------ AM 8:00 ------------✄";
+}
+
+function setKeys() {
+    var tokens = selectTokens();
+    CONSUMER_KEY = tokens[0];
+    CONSUMER_SECRET = tokens[1];
+}
+
+function selectTokens() {
+    var sheet = SpreadsheetApp.getActive().getSheetByName('tokens');
+    var data = sheet.getSheetValues(1, 1, 1, sheet.getLastColumn());
+    return data[0];
+}
